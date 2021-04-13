@@ -910,6 +910,9 @@ static void spdk_fio_completion_cb(void *ctx, const struct spdk_nvme_cpl *cpl)
 		}
 	}
 
+	if (cpl->sc > 0 || cpl->sct > 0)
+		fio_req->io->error = 1;
+
 	assert(fio_thread->iocq_count < fio_thread->iocq_size);
 	fio_thread->iocq[fio_thread->iocq_count++] = fio_req->io;
 }
